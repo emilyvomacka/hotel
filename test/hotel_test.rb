@@ -2,8 +2,10 @@ require_relative 'test_helper'
 
 describe "Hotel class" do
   describe "Hotel instantiation" do
+    
     before do
       @hotel = Hotel.new
+      @res = @hotel.make_reservation(2019, 9, 1, 2019, 9, 5)
     end
     
     it "is an instance of Hotel" do
@@ -14,8 +16,20 @@ describe "Hotel class" do
       expect(@hotel.rooms.length).must_equal 20
     end 
     
-    # it "can list all rooms" do 
-    #   expect(@hotel.list_rooms).must_equal "Room Number 1\nRoom Number 2\nRoom Number 3\nRoom Number 4\nRoom Number 5\nRoom Number 6\nRoom Number 7\nRoom Number 8\nRoom Number 9\nRoom Number 10\nRoom Number 11\nRoom Number 12\nRoom Number 13\nRoom Number 14\nRoom Number 15\nRoom Number 16\nRoom Number 17\nRoom Number 18\nRoom Number 19\nRoom Number 20\n" 
-    # end 
+    it "can create a reservation" do 
+      expect(@res).must_be_kind_of Reservation
+    end 
+    
+    it "adds reservation to the reservation array for the correct room" do 
+      expect(@hotel.rooms[@res.room_num - 1].reservations.length).must_equal 1
+    end 
+    
+    it "shows a list of available rooms for a given night" do 
+      expect(@hotel.available_rooms(2019, 9, 2).length).must_equal 19
+    end 
+    
+    it "returns a list of reservations for a given date" do 
+      expect(@hotel.reservations_by_date(2019, 9, 2).length).must_equal 1
+    end 
   end 
 end 

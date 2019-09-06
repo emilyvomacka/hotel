@@ -1,4 +1,5 @@
 require_relative 'room'
+require_relative 'reservation'
 
 class Hotel
   attr_reader :rooms
@@ -15,13 +16,37 @@ class Hotel
     end 
   end 
   
-  # availability logic I'm not using yet.
-  # def available_rooms(req_start_date, req_end_date = nil)
-  #   @rooms.each do |room|
-  #     room.reservations.each do |reservation|
-  #       if req_start_date >= reservation.start_date && req_end_date <= reservation.end_date
-  #       end 
-  #     end
-  #   end 
-  # end 
+  # future method for when rooms must be assigned according to availability 
+  # def assign_room(start_date, end_date)
+  
+  #potential_drivers =  @drivers.select { |driver| driver.status == :AVAILABLE && driver.trips.none? { |trip| trip.end_time == nil }  } 
+  
+  def make_reservation(start_year, start_month, start_day, end_year, end_month, end_day)
+    new_reservation = Reservation.new(start_year, start_month, start_day, end_year, end_month, end_day)
+    @rooms[new_reservation.room_num - 1].reservations << new_reservation 
+    return new_reservation
+  end 
+  
+  #shows which rooms are available on a given day
+  def available_rooms(start_year, start_month, start_day)
+    requested_date = Date.new(start_year, start_month, start_day)
+    # req_end_date = Date.new(end_year, end_month, end_day)
+    # date_array = []
+    # (req_start_date...req_end_date).each do |date| 
+    #   date_array << date 
+    # end 
+    return @rooms.select { |room| room.reservations.none? { |res|res.date_range.include?(requested_date) } }
+  end 
+  
+  #returns all reservations for a given date
+  def reservations_by_date(year, month, day)
+    requested_date = Date.new(year, month, day)
+    reservations_by_date = []
+    @rooms.each do |room| 
+      if valid_date_res = room.reservations.find { |res| res.date_range.include?(requested_date)}
+        reservations_by_date << valid_date_res
+      end 
+    end 
+    return reservations_by_date
+  end 
 end 
