@@ -24,8 +24,8 @@ describe "Hotel class" do
       expect(@hotel.rooms[@res.room_num - 1].reservations.length).must_equal 1
     end 
     
-    it "shows a list of available rooms for a given night" do 
-      expect(@hotel.available_rooms(2019, 9, 2).length).must_equal 19
+    it "shows a list of available rooms for a given date range" do 
+      expect(@hotel.available_rooms(2019, 9, 2, 2019, 9, 3).length).must_equal 19
     end 
     
     it "returns a list of reservations for a given date" do 

@@ -10,10 +10,6 @@ describe "Reservation class" do
       expect(@res).must_be_kind_of Reservation
     end
     
-    it "assigns a room" do 
-      expect(@res.room_num).must_be_kind_of Integer
-    end 
-    
     it "can calculate total cost" do 
       expect(@res.total_cost).must_equal 600
     end 

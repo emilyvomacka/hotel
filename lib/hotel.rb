@@ -23,19 +23,21 @@ class Hotel
   
   def make_reservation(start_year, start_month, start_day, end_year, end_month, end_day)
     new_reservation = Reservation.new(start_year, start_month, start_day, end_year, end_month, end_day)
+    potential_rooms = available_rooms(start_year, start_month, start_day, end_year, end_month, end_day)
+    if potential_rooms == nil
+      raise ArgumentError, "No vacancy :/"
+    end 
+    new_reservation.room_num = potential_rooms.sample.room_num.to_i
     @rooms[new_reservation.room_num - 1].reservations << new_reservation 
     return new_reservation
   end 
   
   #shows which rooms are available on a given day
-  def available_rooms(start_year, start_month, start_day)
-    requested_date = Date.new(start_year, start_month, start_day)
-    # req_end_date = Date.new(end_year, end_month, end_day)
-    # date_array = []
-    # (req_start_date...req_end_date).each do |date| 
-    #   date_array << date 
-    # end 
-    return @rooms.select { |room| room.reservations.none? { |res|res.date_range.include?(requested_date) } }
+  def available_rooms(start_year, start_month, start_day, end_year, end_month, end_day)
+    req_start_date = Date.new(start_year, start_month, start_day)
+    req_end_date = Date.new(end_year, end_month, end_day)
+    req_date_range = (req_start_date...req_end_date)
+    return @rooms.select { |room| room.reservations.none? { |res| res.date_range.grep(req_date_range) } }
   end 
   
   #returns all reservations for a given date
@@ -43,7 +45,7 @@ class Hotel
     requested_date = Date.new(year, month, day)
     reservations_by_date = []
     @rooms.each do |room| 
-      if valid_date_res = room.reservations.find { |res| res.date_range.include?(requested_date)}
+      if valid_date_res = room.reservations.find {|res|res.date_range.include?(requested_date)}
         reservations_by_date << valid_date_res
       end 
     end 
