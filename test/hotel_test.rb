@@ -69,14 +69,15 @@ describe "Hotel class" do
     before do 
       @hotel = Hotel.new(4)
       @res = @hotel.make_reservation(2019, 9, 1, 2019, 9, 5)
+      @date_range = DateRange.new(2019, 9, 2, 2019, 9, 3)
     end 
     
     it "decreases list of available rooms for a date conflicting with a single reservation by 1" do 
-      expect(@hotel.available_rooms(2019, 9, 2, 2019, 9, 3).length).must_equal 3
+      expect(@hotel.available_rooms(@date_range).length).must_equal 3
     end 
     
     it "does not list previously reserved room in list of available rooms" do
-      available_room_nums = @hotel.available_rooms(2019, 9, 2, 2019, 9, 3).map do |room|
+      available_room_nums = @hotel.available_rooms(@date_range).map do |room|
         room.room_num
       end 
       expect(available_room_nums).wont_include @res.room_num

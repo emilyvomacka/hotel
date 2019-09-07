@@ -3,7 +3,8 @@ require_relative 'test_helper'
 describe "Reservation class" do
   describe "Reservation instantiation" do
     before do
-      @res = Reservation.new(2019, 7, 6, 2019, 7, 9)
+      @date_range = DateRange.new(2019, 7, 6, 2019, 7, 9)
+      @res = Reservation.new(@date_range)
     end
     
     it "is an instance of Reservation" do

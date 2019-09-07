@@ -22,8 +22,9 @@ class Hotel
   #potential_drivers =  @drivers.select { |driver| driver.status == :AVAILABLE && driver.trips.none? { |trip| trip.end_time == nil }  } 
   
   def make_reservation(start_year, start_month, start_day, end_year, end_month, end_day)
-    new_reservation = Reservation.new(start_year, start_month, start_day, end_year, end_month, end_day)
-    potential_rooms = available_rooms(start_year, start_month, start_day, end_year, end_month, end_day)
+    res_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
+    new_reservation = Reservation.new(res_range)
+    potential_rooms = available_rooms(res_range)
     if potential_rooms.length == 0
       raise ArgumentError, "No vacancy"
     end 
@@ -32,9 +33,22 @@ class Hotel
     return new_reservation
   end 
   
-  #shows which rooms are available on a given day
-  def available_rooms(start_year, start_month, start_day, end_year, end_month, end_day)
-    req_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
+  def make_block(start_year, start_month, start_day, end_year, end_month, end_day, block_name, room_quantity, cost)
+    block_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
+    block = Block.new(block_range, block_name, room_quantity, cost)
+    potential_rooms = available_rooms(block_range)
+    if potential_rooms.length < room_quantity
+      return ArgumentError, "The hotel does not have a sufficient number of empty rooms to book this block."
+    end 
+    block_rooms = potential_rooms.select(room_quantity)
+    block_rooms.each do |block_room|
+      block.room_nums << block_room.room_num
+      @rooms[block_room.room_num - 1].blocks << block
+    end 
+  end 
+  
+  #shows which rooms are available on a given day, require date_range
+  def available_rooms(req_range)
     return @rooms.select { |room| 
       room.reservations.all? { |res| 
         res.date_range.range.grep(req_range.range).length == 0 
@@ -54,7 +68,3 @@ class Hotel
     return reservations_by_date
   end 
 end 
-
-ks = Hotel.new(2)
-res = ks.make_reservation(2019, 9, 1, 2019, 9, 5)
-problem = ks.available_rooms(2019, 9, 2, 2019, 9, 3)
