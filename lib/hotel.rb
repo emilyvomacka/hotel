@@ -25,7 +25,7 @@ class Hotel
     new_reservation = Reservation.new(start_year, start_month, start_day, end_year, end_month, end_day)
     potential_rooms = available_rooms(start_year, start_month, start_day, end_year, end_month, end_day)
     if potential_rooms.length == 0
-      raise ArgumentError, "No vacancy :/"
+      raise ArgumentError, "No vacancy"
     end 
     new_reservation.room_num = potential_rooms.sample.room_num.to_i
     @rooms[new_reservation.room_num - 1].reservations << new_reservation 
@@ -35,7 +35,11 @@ class Hotel
   #shows which rooms are available on a given day
   def available_rooms(start_year, start_month, start_day, end_year, end_month, end_day)
     req_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
-    return @rooms.select { |room| room.reservations.none? { |res| res.date_range.range.grep(req_range) } }
+    return @rooms.select { |room| 
+      room.reservations.all? { |res| 
+        res.date_range.range.grep(req_range.range).length == 0 
+      } 
+    }
   end 
   
   #returns all reservations for a given date
@@ -50,3 +54,7 @@ class Hotel
     return reservations_by_date
   end 
 end 
+
+ks = Hotel.new(2)
+res = ks.make_reservation(2019, 9, 1, 2019, 9, 5)
+problem = ks.available_rooms(2019, 9, 2, 2019, 9, 3)
