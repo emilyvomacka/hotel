@@ -65,6 +65,26 @@ describe "Hotel class" do
     end 
   end 
   
+  describe "make_block" do 
+    before do 
+      @hotel = Hotel.new(4)
+      @block = @hotel.make_block(2019, 9, 1, 2019, 9, 5, "name", 1, 100)
+    end 
+    
+    it "can create a block" do 
+      expect(@block).must_be_kind_of Block
+    end 
+    
+    it "adds block to the block array for the correct room" do 
+      expect(@hotel.rooms[@block.room_nums[0] - 1].blocks.length).must_equal 1
+    end 
+    
+    it "returns an error if the user tries to book when the hotel is full" do 
+      @hotel.make_block(2019, 9, 1, 2019, 9, 5, "name", 3, 100)
+      expect {@hotel.make_block(2019, 9, 1, 2019, 9, 5, "name", 1, 100)}.must_raise ArgumentError
+    end 
+  end 
+  
   describe "available_rooms" do 
     before do 
       @hotel = Hotel.new(4)

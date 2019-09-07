@@ -38,21 +38,20 @@ class Hotel
     block = Block.new(block_range, block_name, room_quantity, cost)
     potential_rooms = available_rooms(block_range)
     if potential_rooms.length < room_quantity
-      return ArgumentError, "The hotel does not have a sufficient number of empty rooms to book this block."
+      raise ArgumentError, "The hotel does not have a sufficient number of empty rooms to book this block."
     end 
-    block_rooms = potential_rooms.select(room_quantity)
+    block_rooms = potential_rooms.sample(room_quantity)
     block_rooms.each do |block_room|
       block.room_nums << block_room.room_num
       @rooms[block_room.room_num - 1].blocks << block
     end 
+    return block
   end 
   
   #shows which rooms are available on a given day, require date_range
   def available_rooms(req_range)
     return @rooms.select { |room| 
-      room.reservations.all? { |res| 
-        res.date_range.range.grep(req_range.range).length == 0 
-      } 
+      room.reservations.all? {|res| res.date_range.range.grep(req_range.range).length == 0 } && room.blocks.all? {|block| block.date_range.range.grep(req_range.range).length == 0 }
     }
   end 
   
