@@ -11,10 +11,6 @@ describe "Reservation class" do
       expect(@res).must_be_kind_of Reservation
     end
     
-    it "will raise an argument error in response to invalid date input" do 
-      expect {Reservation.new(2019, 7, 4, 2019, 7, 1)}.must_raise ArgumentError
-    end 
-    
     it "can calculate total cost" do 
       expect(@res.total_cost).must_equal 600
     end 
