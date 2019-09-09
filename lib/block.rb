@@ -1,6 +1,6 @@
 class Block
   attr_reader :date_range, :name, :room_quantity, :cost
-  attr_accessor :room_nums, :available_rooms
+  attr_accessor :room_nums 
   
   def initialize(block_range, block_name, room_quantity, cost)
     @date_range = block_range
@@ -8,14 +8,13 @@ class Block
     @room_quantity = room_quantity
     @room_nums = []
     @cost = cost 
-    @available_rooms = room_nums.length 
   end 
   
   def total_cost 
     return @cost * (date_range.end_date - date_range.start_date)
   end 
   
-  def available_rooms
-    return @room_nums
+  def unbooked_rooms_count
+    return @room_nums.length 
   end 
 end
