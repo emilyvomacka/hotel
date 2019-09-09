@@ -1,0 +1,8 @@
+Changes I could make to hotel:
+
+-Edit reservation to include name, promo codes/discounts, details like check-out time, additional charges 
+-Track reservations in a hash using name as a key, to make look up faster
+-Figure out how to eliminate reservations from past dates, so the system doesn't become overloaded as time progresses.
+-Allow more aspects of a reservation to be edited. (change stay duration, for example)
+-Eliminate or reduce dependencies as I understand them more
+
