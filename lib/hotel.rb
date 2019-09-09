@@ -1,6 +1,7 @@
 require_relative 'room'
 require_relative 'reservation'
 require_relative 'daterange'
+require_relative 'block'
 
 class Hotel
   attr_reader :rooms, :blocks
