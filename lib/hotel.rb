@@ -4,6 +4,7 @@ require_relative 'daterange'
 
 class Hotel
   attr_reader :rooms, :blocks
+  
   def initialize(rooms)
     @rooms = []
     @blocks = []
@@ -18,10 +19,6 @@ class Hotel
     end 
   end 
   
-  # future method for when rooms must be assigned according to availability 
-  # def assign_room(start_date, end_date)
-  #potential_drivers =  @drivers.select { |driver| driver.status == :AVAILABLE && driver.trips.none? { |trip| trip.end_time == nil }  } 
-  
   def make_reservation(start_year, start_month, start_day, end_year, end_month, end_day)
     res_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
     new_reservation = Reservation.new(res_range)
@@ -34,6 +31,7 @@ class Hotel
     return new_reservation
   end 
   
+  #reserve a room within a previously scheduled block
   def make_block_reservation(start_year, start_month, start_day, end_year, end_month, end_day, input_name)
     res_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
     block = blocks.find {|block| block.name == input_name}
@@ -49,6 +47,7 @@ class Hotel
     return new_block_reservation
   end 
   
+  #create a new block of multiple rooms 
   def make_block(start_year, start_month, start_day, end_year, end_month, end_day, block_name, room_quantity, cost)
     block_range = DateRange.new(start_year, start_month, start_day, end_year, end_month, end_day)
     block = Block.new(block_range, block_name, room_quantity, cost)

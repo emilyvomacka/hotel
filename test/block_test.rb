@@ -23,14 +23,15 @@ describe "Block class" do
     end 
   end 
   
-  # describe "available_rooms" do
-  #   before do
-  #     @date_range = DateRange.new(2019, 7, 6, 2019, 7, 9)
-  #     @block = Block.new(@date_range, "name", 1, 100)
-  #   end 
-  
-  #   it "can return a list of available rooms" do 
-  #     expect(@block..length).must_equal @block.room_quantity
-  #   end 
-  
+  describe "available_rooms" do
+    before do
+      @hotel = Hotel.new(4)
+      @block = @hotel.make_block(2019, 7, 6, 2019, 7, 9, "name", 3, 100)
+    end 
+    
+    it "can return a list of available rooms" do 
+      expect(@block.room_nums.length).must_equal @block.room_quantity
+    end 
+    
+  end 
 end 

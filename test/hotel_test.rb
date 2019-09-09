@@ -114,7 +114,7 @@ describe "Hotel class" do
         expect {@hotel.make_block_reservation(2019, 9, 1, 2019, 9, 3, "nora")}.must_raise ArgumentError
       end 
       
-      it "returns an error if the user tried to book a block containing a name and date range identical to a block already in the system" do 
+      it "returns an error if the user tries to book a block containing a name and date range identical to a block already in the system" do 
         expect {@hotel.make_block(2019, 9, 1, 2019, 9, 5, "zadie", 1, 100)}.must_raise ArgumentError 
       end 
       
