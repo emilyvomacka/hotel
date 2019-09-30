@@ -69,9 +69,13 @@ class Hotel
   
   #shows which rooms are neither reserved nor blocked on a given day, require date_range
   def available_rooms(req_range)
-    return @rooms.select { |room| 
-      room.reservations.all? {|res| res.date_range.range.grep(req_range.range).length == 0 } && room.blocks.all? {|block| block.date_range.range.grep(req_range.range).length == 0 }
-    }
+    available_rooms_array = []
+    rooms.each do |curr_room|
+      if curr_room.is_available(req_range)
+        available_rooms_array << curr_room
+      end 
+    end 
+    return available_rooms_array
   end 
   
   #returns all reservations for a given date
