@@ -38,6 +38,9 @@ If we decide items are cheaper if bought in bulk, how would this change the code
 
 Which implementation better adheres to the single responsibility principle?
   Implementation B
-  
+
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
   Implementation B
+
+Based on the answers to each set of the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how the resulting design would be an improvement.
+  This is not listed in my refactor ideas (which were mainly extra features, not improvements of existing features), but: the available_rooms function within Hotel contains logic that should be the responsibility of the Room class. Right now, Hotel is determining which room is available, but ideally it would ask the room whether it's available and let the room make that determination. I've edited the code to make that change by adding an is_available function to Room. 
